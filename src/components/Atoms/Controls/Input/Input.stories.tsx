@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import Input from "./index"; // Adjust this import path as needed
+import Input, { CustomChangeEvent } from "./index"; // Adjust this import path as needed
 import { Button, Form } from "@/components";
 
 const meta: Meta<typeof Input> = {
@@ -162,13 +162,55 @@ export const WithCustomOnChange: Story = {
     type: "text",
     label: "Custom OnChange Input",
     placeholder: "Type something",
-    onChange: (e: any) => {
+    onChange: (e: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent) => {
       if ("target" in e) {
         console.log("Custom onChange:", e.target.value);
-      } else {
-        console.log("Custom onChange:", e.value);
       }
     },
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const WithWhitespaceValidation: Story = {
+  args: {
+    name: "whitespaceInput",
+    type: "text",
+    label: "Input with Whitespace Validation",
+    placeholder: "Cannot be empty",
+    customValidation: {
+      validate: (value: string) => value.trim().length > 0 || "Cannot be empty",
+    },
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const WithPrefix: Story = {
+  args: {
+    name: "prefixInput",
+    type: "text",
+    label: "Input with Prefix",
+    placeholder: "Enter amount",
+    prefix: "$",
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const WithSuffix: Story = {
+  args: {
+    name: "suffixInput",
+    type: "text",
+    label: "Input with Suffix",
+    placeholder: "Enter weight",
+    suffix: "kg",
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const Checkbox: Story = {
+  args: {
+    name: "checkboxInput",
+    type: "checkbox",
+    label: "Accept terms and conditions",
   },
   render: (args) => <InputWrapper {...args} />,
 };
@@ -266,6 +308,39 @@ WithCustomOnChange.parameters = {
   docs: {
     description: {
       story: "An input field with a custom onChange handler.",
+    },
+  },
+};
+
+WithWhitespaceValidation.parameters = {
+  docs: {
+    description: {
+      story:
+        "Shows validation that prevents submission of whitespace-only values.",
+    },
+  },
+};
+
+WithPrefix.parameters = {
+  docs: {
+    description: {
+      story: "Input field with a prefix symbol or text.",
+    },
+  },
+};
+
+WithSuffix.parameters = {
+  docs: {
+    description: {
+      story: "Input field with a suffix symbol or text.",
+    },
+  },
+};
+
+Checkbox.parameters = {
+  docs: {
+    description: {
+      story: "A single checkbox input.",
     },
   },
 };
