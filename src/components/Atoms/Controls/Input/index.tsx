@@ -37,10 +37,12 @@ interface CustomInputProps
   radioOptions?: Array<{ label: string; value: string; disabled?: boolean }>;
   required?: boolean;
   badge?: string;
+  showValidationErrors?: boolean;
   dropdownOptions?: Array<MenuItem>;
   customValidation?: RegisterOptions;
   prefix?: string;
   suffix?: string;
+  rootClassName?: string;
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent,
   ) => void;
@@ -76,7 +78,9 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       radioOptions,
       required = true,
       badge,
+      showValidationErrors = true,
       className,
+      rootClassName,
       dropdownOptions,
       onChange,
       customValidation,
@@ -337,10 +341,11 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         </Tooltip>
       );
     };
-    return (
-      <div
-        className={`flex flex-col gap-2 w-full py-1 h-fit ${disabled ? "opacity-40" : "opacity-100"}`}
-      >
+
+    let inputMetadataNode;
+
+    if (label || badge || tooltip) {
+      inputMetadataNode = (
         <div className="flex flex-row items-center space-x-3">
           {label && renderLabel()}
           {badge && (
@@ -350,8 +355,18 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           )}
           {tooltip && renderTooltip(tooltip)}
         </div>
+      );
+    }
+
+    const showError = showValidationErrors && !disabled && errors[name];
+
+    return (
+      <div
+        className={`flex flex-col gap-2 w-full py-1 h-fit ${disabled ? "opacity-40" : "opacity-100"} ${rootClassName}`}
+      >
+        {inputMetadataNode}
         {renderInput()}
-        {!disabled && errors[name] && (
+        {showError && (
           <span className="text-error-600 text-xs">
             {errors[name]?.message as string}
           </span>
