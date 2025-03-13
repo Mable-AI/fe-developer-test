@@ -71,3 +71,18 @@ export const CustomStyles: Story = {
     className: "border-2 border-blue-500",
   },
 };
+
+export const WithFallbackName: Story = {
+  args: {
+    ...Default.args,
+    src: undefined,
+    name: "John Doe",
+  },
+};
+
+export const WithoutNameAndSrc: Story = {
+  args: {
+    ...Default.args,
+    src: undefined,
+  },
+};
