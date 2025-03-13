@@ -10,7 +10,7 @@ const meta: Meta<typeof Avatar> = {
   tags: ["autodocs"],
   parameters: {
     componentSubtitle:
-      "Displays an avatar image with customizable size and shape.",
+      "Displays an avatar image or name initials with customizable size and shape.",
   },
   argTypes: {
     size: {
