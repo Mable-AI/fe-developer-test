@@ -9,11 +9,12 @@ import { IoIosEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { Tooltip } from "../../Misc/Tooltip";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import Checkbox from "../Checkbox";
 
-interface CustomChangeEvent {
+export interface CustomChangeEvent {
   target: {
     name: string;
-    value: any;
+    value: string | boolean;
     type: string;
   };
 }
@@ -36,8 +37,12 @@ interface CustomInputProps
   radioOptions?: Array<{ label: string; value: string; disabled?: boolean }>;
   required?: boolean;
   badge?: string;
+  showValidationErrors?: boolean;
   dropdownOptions?: Array<MenuItem>;
   customValidation?: RegisterOptions;
+  prefix?: string;
+  suffix?: string;
+  rootClassName?: string;
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent,
   ) => void;
@@ -53,6 +58,12 @@ const inputClass = tv({
     withIcon: {
       true: "pr-12", // Add padding to the right to accommodate the icon
     },
+    withPrefix: {
+      true: "pl-12", // Add padding to the left to accommodate the prefix
+    },
+    withSuffix: {
+      true: "pr-12", // Add padding to the right to accommodate the suffix
+    },
   },
 });
 
@@ -67,7 +78,9 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       radioOptions,
       required = true,
       badge,
+      showValidationErrors = true,
       className,
+      rootClassName,
       dropdownOptions,
       onChange,
       customValidation,
@@ -167,7 +180,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       trigger(name);
     };
 
-    const createCustomEvent = (value: any): CustomChangeEvent => ({
+    const createCustomEvent = (value: string | boolean): CustomChangeEvent => ({
       target: {
         name,
         value,
@@ -176,6 +189,9 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
     });
 
     const renderInput = () => {
+      let prefixNode = null;
+      let suffixNode = null;
+
       switch (type) {
         case "radio":
           return (
@@ -210,7 +226,10 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
                   else if (ref) ref.current = e;
                 }
               }}
-              onChange={(checked) => handleChange(createCustomEvent(checked))}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                handleChange(createCustomEvent(checked));
+              }}
             />
           );
         case "dropdown":
@@ -227,14 +246,40 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
                 : (props.defaultValue ?? props.placeholder)}
             </DropdownMenu>
           );
+        case "checkbox":
+          return (
+            <Checkbox
+              name={name}
+              label={label}
+              className={className}
+              {...props}
+            />
+          );
         default:
+          if (props.prefix)
+            prefixNode = (
+              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 body-3 text-white">
+                {props.prefix}
+              </span>
+            );
+
+          if (props.suffix)
+            suffixNode = (
+              <span className="absolute right-4 top-1/2 transform -translate-y-1/2 body-3 text-white">
+                {props.suffix}
+              </span>
+            );
+
           return (
             <div className="relative w-full">
+              {prefixNode}
               <input
                 defaultValue={props.defaultValue}
                 className={inputClass({
                   error: !disabled && errors[name] !== undefined,
                   withIcon: type === "password",
+                  withPrefix: !!props.prefix,
+                  withSuffix: !!props.suffix,
                   className,
                 })}
                 disabled={disabled}
@@ -248,7 +293,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
                   if (typeof ref === "function") ref(e);
                 }}
               />
-              {type === "password" && (
+              {type === "password" ? (
                 <button
                   type="button"
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white focus:outline-none"
@@ -260,6 +305,8 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
                     <IoEye size={20} />
                   )}
                 </button>
+              ) : (
+                suffixNode
               )}
             </div>
           );
@@ -276,6 +323,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       return (
         <label htmlFor={name} className="body-2 text-white">
           {label}
+          {required && <span className="text-error-600 ml-1">*</span>}
         </label>
       );
     };
@@ -293,10 +341,11 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         </Tooltip>
       );
     };
-    return (
-      <div
-        className={`flex flex-col gap-2 w-full py-1 h-fit ${disabled ? "opacity-40" : "opacity-100"}`}
-      >
+
+    let inputMetadataNode;
+
+    if (label || badge || tooltip) {
+      inputMetadataNode = (
         <div className="flex flex-row items-center space-x-3">
           {label && renderLabel()}
           {badge && (
@@ -306,8 +355,18 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           )}
           {tooltip && renderTooltip(tooltip)}
         </div>
+      );
+    }
+
+    const showError = showValidationErrors && !disabled && errors[name];
+
+    return (
+      <div
+        className={`flex flex-col gap-2 w-full py-1 h-fit ${disabled ? "opacity-40" : "opacity-100"} ${rootClassName}`}
+      >
+        {inputMetadataNode}
         {renderInput()}
-        {!disabled && errors[name] && (
+        {showError && (
           <span className="text-error-600 text-xs">
             {errors[name]?.message as string}
           </span>

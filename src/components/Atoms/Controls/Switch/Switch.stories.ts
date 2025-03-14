@@ -32,3 +32,13 @@ export const ActiveToggle: Story = {
     checked: true,
   },
 };
+
+export const DisabledToggle: Story = {
+  name: "Toggle (Disabled)",
+  args: {
+    name: "toggle",
+    title: "This is a toggle Switch",
+    checked: false,
+    disabled: true,
+  },
+};
