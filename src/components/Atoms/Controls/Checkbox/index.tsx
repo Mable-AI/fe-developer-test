@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes, useEffect } from "react";
 import { tv } from "tailwind-variants";
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -32,6 +32,10 @@ const Checkbox: React.FC<CheckboxProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
 
   const rootClass = tv({
     base: "flex items-center gap-2",
