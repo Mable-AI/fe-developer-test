@@ -3,50 +3,21 @@ import { tv } from "tailwind-variants";
 import Switch from "@/components/Atoms/Controls/Switch";
 import DropdownMenu from "@/components/Molecules/Dropdowns";
 import Radio from "../RadioButton";
-import { MenuItem } from "@/types";
+import {
+  CustomChangeEvent,
+  InputComponentType,
+  InputType,
+  MenuItem,
+  RadioItems,
+  ValidInputType,
+} from "@/types";
 import { IoIosEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { Tooltip } from "../../Misc/Tooltip";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import CheckBox from "../CheckBox";
 import TextArea from "../Textarea";
-
-interface CustomChangeEvent {
-  target: {
-    name: string;
-    value: string | number | boolean;
-    type: string;
-  };
-}
-
-interface RadioItems {
-  label: string;
-  value: string;
-  disabled?: boolean;
-}
-
-type ValidInputType = "email" | "tel" | "number" | "password";
-
-type InputComponentType =
-  | "radio"
-  | "switch"
-  | "dropdown"
-  | "default"
-  | "checkbox"
-  | "textarea";
-
-type InputType =
-  | "text"
-  | "email"
-  | "password"
-  | "number"
-  | "tel"
-  | "radio"
-  | "dropdown"
-  | "switch"
-  | "checkbox"
-  | "textarea";
 
 const validInputTypes: InputType[] = [
   "radio",
@@ -213,7 +184,7 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
       target: { name, value, type },
     });
 
-    const renderInput = () => {
+    const renderInput = useCallback(() => {
       const inputComponent = {
         radio: (
           <Radio
@@ -332,12 +303,12 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
         ? (type as InputComponentType)
         : "default";
       return inputComponent[componentKey] || inputComponent.default;
-    };
+    }, [type]);
 
     useEffect(() => {
       renderInput();
       if (!disabled) resetField(name, { defaultValue: props.defaultValue });
-    }, [disabled]);
+    }, [disabled, name, props.defaultValue, resetField, renderInput]);
 
     const renderLabel = () => {
       if (
@@ -396,4 +367,5 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
 );
 
 Input.displayName = "Input";
+
 export default Input;
