@@ -33,7 +33,7 @@ export const Text: Story = {
     type: "text",
     label: "Text Input",
     required: true,
-    disabled: true,
+    disabled: false,
     tooltip: "This is a tooltip",
 
     placeholder: "Enter text",
@@ -101,6 +101,26 @@ export const Switch: Story = {
     name: "switchInput",
     type: "switch",
     label: "Switch Input",
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const CheckBox: Story = {
+  args: {
+    name: "CheckBoxInput",
+    type: "checkbox",
+    label: "CheckBox Input",
+  },
+  render: (args) => <InputWrapper {...args} />,
+};
+
+export const TextArea: Story = {
+  args: {
+    name: "textAreaInput",
+    type: "textarea",
+    label: "TextArea Input",
+    placeholder: "Enter text",
+    rows: 5,
   },
   render: (args) => <InputWrapper {...args} />,
 };
@@ -229,6 +249,22 @@ Switch.parameters = {
   },
 };
 
+CheckBox.parameters = {
+  docs: {
+    description: {
+      story: "A CheckBox input for Terms and Condition.",
+    },
+  },
+};
+
+TextArea.parameters = {
+  docs: {
+    description: {
+      story: "A TextArea is a input box with multiple lines of text.",
+    },
+  },
+};
+
 Dropdown.parameters = {
   docs: {
     description: {
@@ -280,7 +316,7 @@ The Input component is a versatile and customizable input field that supports va
 
 ## Features
 
-- Supports multiple input types: text, email, password, number, tel, radio, switch, and dropdown
+- Supports multiple input types: text, email, password, number, tel, radio, switch, checkbox , textarea and dropdown
 - Built-in validation for common input types
 - Custom validation support
 - Integrates with react-hook-form
