@@ -272,10 +272,13 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
         ),
         textarea: (
           <TextArea
-            defaultValue={fieldValue}
+            defaultValue={props.defaultValue}
             rows={rows}
-            label={label} // optional
+            label={label}
             onChange={handleChange}
+            disabled={disabled}
+            className={className}
+            errors={errors[name] !== undefined}
             {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         ),
@@ -337,7 +340,12 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
     }, [disabled]);
 
     const renderLabel = () => {
-      if (type === "switch" || type === "radio" || type === "checkbox")
+      if (
+        type === "switch" ||
+        type === "radio" ||
+        type === "checkbox" ||
+        type === "textarea"
+      )
         return null;
       return (
         <label htmlFor={name} className="body-2 text-white">

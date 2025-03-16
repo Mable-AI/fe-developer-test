@@ -61,3 +61,12 @@ export const Info: Story = {
     label: "NOTIFICATION",
   },
 };
+
+export const CustomBadge: Story = {
+  args: {
+    variant: "custom",
+    label: "CUSTOM",
+    className: "bg-purple-800 hover:bg-purple-700", // example override
+    rounded: true,
+  },
+};
