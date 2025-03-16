@@ -18,12 +18,7 @@ interface TextareaComponentProps extends TextareaProps {
 }
 
 const textareaStyle = tv({
-  base: [
-    "w-full rounded-md border border-outline bg-secondary px-3 py-2 text-sm shadow-sm",
-    "placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary",
-    "disabled:cursor-not-allowed disabled:opacity-50 dark:border-outline dark:placeholder:text-secondary",
-    "dark:focus-visible:ring-primary text-text-secondary",
-  ],
+  base: "body-3 w-full rounded-xl p-4 bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
   variants: {
     error: {
       true: "border border-error-600",

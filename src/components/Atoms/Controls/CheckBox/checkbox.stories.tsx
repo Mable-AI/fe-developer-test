@@ -17,7 +17,7 @@ type Story = StoryObj<typeof Checkbox>;
 export const Checkboxes: Story = {
   args: {
     name: "checkboxInput",
-    label: "Check this box",
+    label: "Remember Me",
   },
   render: (args) => <Checkbox {...args} />,
 };

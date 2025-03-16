@@ -50,16 +50,16 @@ const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
     });
 
     const checkboxClass = tv({
-      base: "w-4 h-4 rounded border-white border-opacity-10 bg-white bg-opacity-10 text-white",
+      base: "body-3 w-full rounded-xl p-4 bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
       variants: {
         disabled: {
           true: "cursor-not-allowed opacity-50",
           false: "cursor-pointer",
         },
         size: {
-          sm: "w-3 h-3",
-          md: "w-4 h-4",
-          lg: "w-5 h-5",
+          sm: "w-4 h-4",
+          md: "w-5 h-5",
+          lg: "w-6 h-6",
         },
       },
       defaultVariants: {
