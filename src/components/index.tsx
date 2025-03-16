@@ -32,6 +32,8 @@ export { default as ChannelSelector } from '@/components/Molecules/ChannelSelect
 export { default as Form } from '@/components/Molecules/Form';
 export { default as PieChart } from '@/components/Molecules/Charts/PieChart';
 export { default as GroupBarChart } from '@/components/Molecules/Charts/GroupBarChart';
+export { default as ChatBotWidget } from '@/components/Molecules/widgets/ChatBotWidget';
+export { ChatWidget } from '@/components/Molecules/widgets/ChatBotWidget';
 export { CheckboxDropdown } from '@/components/Molecules/CheckboxDropdown';
 export { StepStatus } from '@/components/Molecules/StepStatus';
 export { ConnectionCard } from '@/components/Molecules/ConnectionCard';
