@@ -188,6 +188,7 @@ export const Radio: Story = {
     name: "demo-radio-input",
     type: "radio",
     label: "Radio Input",
+    inputSize: "sm",
     radioOptions: [
       { label: "Option 1", value: "1" },
       { label: "Option 2", value: "2" },

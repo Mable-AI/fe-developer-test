@@ -41,6 +41,7 @@ interface CustomInputProps
   tooltipPlacement?: "top" | "bottom" | "left" | "right";
   dropdownOptions?: Array<MenuItem>;
   customValidation?: RegisterOptions;
+  inputSize?: "sm" | "md" | "lg";
 
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent,
@@ -48,11 +49,16 @@ interface CustomInputProps
 }
 
 const inputClass = tv({
-  base: "body-3 w-full rounded-xl p-4 bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
+  base: "body-3 w-full rounded-xl bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
   variants: {
     error: {
       true: "border border-error-600",
       false: "",
+    },
+    size: {
+      sm: "body-5 font-medium rounded-md p-2",
+      md: "body-3 rounded-xl p-3",
+      lg: "body-3 rounded-xl p-4",
     },
     withIcon: {
       true: "pr-12", // Add padding to the right to accommodate the icon
@@ -79,6 +85,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       onChange,
       customValidation,
       tooltipPlacement,
+      inputSize = "lg",
       ...props
     },
     ref,
@@ -195,6 +202,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         defaultValue: props.defaultValue,
         isError: !disabled && errors[name] !== undefined,
         handleChange,
+        size: inputSize,
       };
 
       switch (type) {
@@ -213,7 +221,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
               onClick={(selectedOption) =>
                 handleChange(createCustomEvent(selectedOption.value))
               }
-              size="sm"
+              size={inputSize}
             />
           );
         case "switch":
@@ -238,7 +246,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           return (
             <DropdownMenu
               disabled={disabled}
-              size="lg"
+              size={inputSize}
               menuList={dropdownOptions || []}
               onChange={(value) => handleChange(createCustomEvent(value.label))}
               className={className}
@@ -345,6 +353,7 @@ const DefaultInput = ({
   parentRef,
   children,
   disableNumberInputDefaults,
+  size,
   ...restProps
 }: {
   defaultValue?: string | number | readonly string[] | undefined;
@@ -361,6 +370,7 @@ const DefaultInput = ({
   children?: React.ReactNode;
   restProps?: any;
   disableNumberInputDefaults?: boolean;
+  size?: "sm" | "md" | "lg";
 }) => {
   return (
     <div className="relative w-full">
@@ -372,6 +382,7 @@ const DefaultInput = ({
           withIcon: withIcon,
           disableNumberInputDefaults: disableNumberInputDefaults,
           className,
+          size,
         })}
         disabled={disabled}
         id={randomIdGenerator()}
