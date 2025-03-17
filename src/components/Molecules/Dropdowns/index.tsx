@@ -27,6 +27,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   position = "bottom",
   disabled = false,
 }) => {
+  console.log("menuList", menuList);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const listItemsRef = useRef<(HTMLElement | null)[]>([]);
@@ -145,7 +146,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   aria-labelledby="options-menu"
                 >
                   <AnimatePresence>
-                    {menuList.map((item: MenuItem, index: number) => (
+                    {menuList?.map((item: MenuItem, index: number) => (
                       <motion.button
                         initial={{ opacity: 0, x: 0 }}
                         animate={{ opacity: 1, x: 0 }}

@@ -329,7 +329,7 @@ The following table shows which props are applicable to each input type:
 | className | string | Additional CSS classes |
 | placeholder | string | Placeholder text for the input |
 | options | Array<{ label: string; value: string; disabled?: boolean }> | Options for radio inputs |
-| dropdownOptions | Array<Array<MenuItem> | Options for dropdown inputs |
+| dropdownOptions | Array<{label: string, key: string}> | Options for dropdown inputs |
 | customOnChange | function | Custom onChange handler |
 | customValidation | RegisterOptions | Custom validation rules |
 | badge | string | Text to display in a badge next to the label |

@@ -9,7 +9,6 @@ import { IoIosEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { Tooltip } from "../../Misc/Tooltip";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { Placement } from "@floating-ui/react";
 import Badge from "../../Misc/Badge";
 interface CustomChangeEvent {
   target: {
@@ -39,7 +38,7 @@ interface CustomInputProps
   radioOptions?: Array<{ label: string; value: string; disabled?: boolean }>;
   required?: boolean;
   badge?: string;
-  tooltipPlacement?: Placement;
+  tooltipPlacement?: "top" | "bottom" | "left" | "right";
   dropdownOptions?: Array<MenuItem>;
   customValidation?: RegisterOptions;
 
