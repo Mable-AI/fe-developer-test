@@ -1,8 +1,9 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoClose } from "react-icons/io5";
 import { tv } from "tailwind-variants";
-import { Button } from "@/components";
+import { ModalHeader } from "./components/ModalHeader";
+import { ModalProgress } from "./components/ModalProgress";
+import { ModalNavigation } from "./components/ModalNavigation";
 import {
   useFloating,
   useClick,
@@ -55,60 +56,6 @@ const overlay = tv({
   ],
 });
 
-const header = tv({
-  base: [
-    // Layout
-    "flex",
-    "justify-between",
-    "items-center",
-    "bg-inherit",
-    "w-full",
-
-    // Typography
-    "text-xl",
-    "font-medium",
-
-    // Visual
-
-    "sticky",
-    "top-0",
-    "z-10",
-  ],
-  variants: {
-    space: {
-      default: "px-6 py-4",
-      extra: "p-8 pb-4",
-    },
-  },
-});
-
-const closeButton = tv({
-  base: [
-    // Base styles
-    "p-2",
-    "rounded-lg",
-    "-mr-2",
-
-    // Colors
-    "text-white/70",
-    "hover:text-white",
-    "hover:bg-white/10",
-    "active:bg-white/20",
-
-    // Transitions
-    "transition-all",
-    "duration-200",
-
-    // Focus states
-    "outline-none",
-
-    // Interactive
-    "cursor-pointer",
-    "select-none",
-    "touch-manipulation",
-  ],
-});
-
 const content = tv({
   base: [
     // Layout
@@ -123,26 +70,6 @@ const content = tv({
       extra: "p-8",
     },
   },
-});
-
-const navigation = tv({
-  base: [
-    // Layout
-    "flex",
-    "justify-between",
-    "items-center",
-    "gap-4",
-    "px-6",
-    "py-4",
-    "mt-auto",
-
-    // Visual
-    "bg-nonUsers/50",
-    "backdrop-blur-sm",
-    "sticky",
-    "bottom-0",
-    "z-10",
-  ],
 });
 
 const animationVariants = {
@@ -299,34 +226,19 @@ const ModalGroup: React.FC<ModalGroupProps> = ({
                   exit="exit"
                   className={modal({ variant: variant })}
                 >
-                  <header className={header({ space })}>
-                    <AnimatePresence
-                      mode="wait"
-                      custom={getDirection(currentStep, prevStep.current)}
-                      initial={false}
-                    >
-                      <motion.h2
-                        key={`title-${currentStep}`}
-                        variants={animationVariants.slideTransition}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        custom={getDirection(currentStep, prevStep.current)}
-                        id={labelId}
-                        className="flex items-center gap-4"
-                      >
-                        {steps[currentStep].title}
-                      </motion.h2>
-                    </AnimatePresence>
+                  <ModalHeader
+                    title={steps[currentStep].title}
+                    onClose={onClose}
+                    currentStep={currentStep}
+                    getDirection={getDirection}
+                    prevStep={prevStep}
+                    labelId={labelId}
+                  />
 
-                    <button
-                      onClick={onClose}
-                      className={closeButton()}
-                      aria-label="Close dialog"
-                    >
-                      <IoClose size={24} />
-                    </button>
-                  </header>
+                  <ModalProgress
+                    currentStep={currentStep}
+                    totalSteps={steps.length}
+                  />
 
                   <div className={content({ space })}>
                     <AnimatePresence
@@ -351,28 +263,14 @@ const ModalGroup: React.FC<ModalGroupProps> = ({
                   </div>
 
                   {useInternalNavigation && (
-                    <div className={navigation()}>
-                      <Button
-                        variant="secondary"
-                        onClick={handlePrevious}
-                        disabled={currentStep === 0}
-                        aria-label="Previous step"
-                      >
-                        Go Back
-                      </Button>
-                      <Button
-                        onClick={handleNext}
-                        aria-label={
-                          currentStep === steps.length - 1
-                            ? "Complete steps"
-                            : "Next step"
-                        }
-                      >
-                        {currentStep === steps.length - 1
-                          ? "Finish"
-                          : "Continue"}
-                      </Button>
-                    </div>
+                    <ModalNavigation
+                      currentStep={currentStep}
+                      totalSteps={steps.length}
+                      onNext={handleNext}
+                      onPrevious={handlePrevious}
+                      getDirection={getDirection}
+                      prevStep={prevStep}
+                    />
                   )}
                 </motion.div>
               </FloatingFocusManager>

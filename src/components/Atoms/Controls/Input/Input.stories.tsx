@@ -1,15 +1,45 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import Input from "./index"; // Adjust this import path as needed
-import { Button, Form } from "@/components";
+import Input from "./index";
+import { Form } from "@/components";
 
 const meta: Meta<typeof Input> = {
   title: "Atoms/Control/Input",
   component: Input,
   tags: ["autodocs"],
   parameters: {
-    componentSubtitle:
-      "A versatile input component with various types and built-in validation",
+    layout: "centered",
+  },
+  argTypes: {
+    type: {
+      control: "select",
+      options: [
+        "text",
+        "email",
+        "password",
+        "number",
+        "tel",
+        "radio",
+        "switch",
+        "dropdown",
+      ],
+    },
+    required: {
+      control: "boolean",
+      description: "Whether the input is required",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Whether the input is disabled",
+    },
+    label: {
+      control: "text",
+      description: "Label text for the input",
+    },
+    placeholder: {
+      control: "text",
+      description: "Placeholder text for the input",
+    },
   },
 };
 
@@ -20,73 +50,22 @@ const InputWrapper: React.FC<React.ComponentProps<typeof Input>> = (args) => {
   return (
     <Form onSubmit={(data) => console.log(data)}>
       <Input {...args} />
-      <Button type="submit" style={{ marginTop: "10px" }}>
-        Submit
-      </Button>
     </Form>
   );
 };
 
-export const Text: Story = {
+export const Default: Story = {
   args: {
-    name: "textInput",
+    name: "demo-default-input",
     type: "text",
-    label: "Text Input",
+    label: "Default Input",
+    defaultValue: "",
     required: true,
-    disabled: true,
-    tooltip: "This is a tooltip",
-
-    placeholder: "Enter text",
-    defaultValue: "Hi theres",
-  },
-  render: (args) => <InputWrapper {...args} />,
-};
-
-export const Email: Story = {
-  args: {
-    name: "emailInput",
-    type: "email",
-    label: "Email Input",
-    placeholder: "Enter email",
-  },
-  render: (args) => <InputWrapper {...args} />,
-};
-
-export const Password: Story = {
-  args: {
-    name: "passwordInput",
-    type: "password",
-    label: "Password Input",
-    placeholder: "Enter password",
-  },
-  render: (args) => <InputWrapper {...args} />,
-};
-
-export const Number: Story = {
-  args: {
-    name: "numberInput",
-    type: "number",
-    label: "Number Input",
-    placeholder: "Enter number",
-  },
-  render: (args) => <InputWrapper {...args} />,
-};
-
-export const Tel: Story = {
-  args: {
-    name: "telInput",
-    type: "tel",
-    label: "Telephone Input",
-    placeholder: "Enter phone number",
-  },
-  render: (args) => <InputWrapper {...args} />,
-};
-
-export const Radio: Story = {
-  args: {
-    name: "radioInput",
-    type: "radio",
-    label: "Radio Input",
+    dropdownOptions: [
+      { label: "Option 1", key: "1" },
+      { label: "Option 2", key: "2" },
+      { label: "Option 3", key: "3" },
+    ],
     radioOptions: [
       { label: "Option 1", value: "1" },
       { label: "Option 2", value: "2" },
@@ -94,20 +73,157 @@ export const Radio: Story = {
     ],
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "The default input configuration showing all possible options.",
+      },
+    },
+  },
+};
+
+export const Text: Story = {
+  args: {
+    name: "demo-text-input",
+    type: "text",
+    label: "Text Input",
+    required: true,
+    tooltip: "This is a tooltip",
+    placeholder: "Enter text",
+    defaultValue: "Hi there",
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+A basic text input field.
+
+\`\`\`jsx
+<Input
+  name="text-input"
+  type="text"
+  label="Text Input"
+  placeholder="Enter text"
+/>
+\`\`\`
+        `,
+      },
+    },
+  },
+};
+
+export const Email: Story = {
+  args: {
+    name: "demo-email-input",
+    type: "email",
+    label: "Email Input",
+    placeholder: "Enter email",
+    tooltip: "This is a tooltip",
+    badge: "Professional",
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "An email input field with built-in email validation.",
+      },
+    },
+  },
+};
+
+export const Password: Story = {
+  args: {
+    name: "demo-password-input",
+    type: "password",
+    label: "Password Input",
+    placeholder: "Enter password",
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A password input field with strong password validation.",
+      },
+    },
+  },
+};
+
+export const Number: Story = {
+  args: {
+    name: "demo-number-input",
+    type: "number",
+    label: "Number Input",
+    placeholder: "Enter number",
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A number input field that only accepts numeric values.",
+      },
+    },
+  },
+};
+
+export const Tel: Story = {
+  args: {
+    name: "demo-tel-input",
+    type: "tel",
+    label: "Telephone Input",
+    placeholder: "Enter phone number",
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A telephone input field with phone number validation.",
+      },
+    },
+  },
+};
+
+export const Radio: Story = {
+  args: {
+    name: "demo-radio-input",
+    type: "radio",
+    label: "Radio Input",
+    inputSize: "sm",
+    radioOptions: [
+      { label: "Option 1", value: "1" },
+      { label: "Option 2", value: "2" },
+      { label: "Option 3", value: "3" },
+    ],
+  },
+  render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A radio button group input.",
+      },
+    },
+  },
 };
 
 export const Switch: Story = {
   args: {
-    name: "switchInput",
+    name: "demo-switch-input",
     type: "switch",
     label: "Switch Input",
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A switch input for boolean values.",
+      },
+    },
+  },
 };
 
 export const Dropdown: Story = {
   args: {
-    name: "dropdownInput",
+    name: "demo-dropdown-input",
     type: "dropdown",
     label: "Dropdown Input",
     defaultValue: "Option 1",
@@ -118,33 +234,55 @@ export const Dropdown: Story = {
     ],
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A dropdown select input.",
+      },
+    },
+  },
 };
 
 export const WithBadge: Story = {
   args: {
-    name: "badgeInput",
+    name: "demo-badge-input",
     type: "text",
     label: "Input with Badge",
     badge: "Optional",
     placeholder: "Enter text",
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "An input field with an additional badge, useful for showing extra information.",
+      },
+    },
+  },
 };
 
 export const Disabled: Story = {
   args: {
-    name: "disabledInput",
+    name: "demo-disabled-input",
     type: "text",
     label: "Disabled Input",
     placeholder: "This input is disabled",
     disabled: true,
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "A disabled input field.",
+      },
+    },
+  },
 };
 
 export const WithCustomValidation: Story = {
   args: {
-    name: "customValidationInput",
+    name: "demo-custom-validation-input",
     type: "text",
     label: "Custom Validation Input",
     placeholder: "Enter more than 5 characters",
@@ -154,11 +292,18 @@ export const WithCustomValidation: Story = {
     },
   },
   render: (args) => <InputWrapper {...args} />,
+  parameters: {
+    docs: {
+      description: {
+        story: "An input field with custom validation rules.",
+      },
+    },
+  },
 };
 
 export const WithCustomOnChange: Story = {
   args: {
-    name: "customOnChangeInput",
+    name: "demo-custom-onChange-input",
     type: "text",
     label: "Custom OnChange Input",
     placeholder: "Type something",
@@ -171,101 +316,11 @@ export const WithCustomOnChange: Story = {
     },
   },
   render: (args) => <InputWrapper {...args} />,
-};
-
-Text.parameters = {
-  docs: {
-    description: {
-      story: "A basic text input field.",
-    },
-  },
-};
-
-Email.parameters = {
-  docs: {
-    description: {
-      story: "An email input field with built-in email validation.",
-    },
-  },
-};
-
-Password.parameters = {
-  docs: {
-    description: {
-      story: "A password input field with strong password validation.",
-    },
-  },
-};
-
-Number.parameters = {
-  docs: {
-    description: {
-      story: "A number input field that only accepts numeric values.",
-    },
-  },
-};
-
-Tel.parameters = {
-  docs: {
-    description: {
-      story: "A telephone input field with phone number validation.",
-    },
-  },
-};
-
-Radio.parameters = {
-  docs: {
-    description: {
-      story: "A radio button group input.",
-    },
-  },
-};
-
-Switch.parameters = {
-  docs: {
-    description: {
-      story: "A switch input for boolean values.",
-    },
-  },
-};
-
-Dropdown.parameters = {
-  docs: {
-    description: {
-      story: "A dropdown select input.",
-    },
-  },
-};
-
-WithBadge.parameters = {
-  docs: {
-    description: {
-      story:
-        "An input field with an additional badge, useful for showing extra information.",
-    },
-  },
-};
-
-Disabled.parameters = {
-  docs: {
-    description: {
-      story: "A disabled input field.",
-    },
-  },
-};
-
-WithCustomValidation.parameters = {
-  docs: {
-    description: {
-      story: "An input field with custom validation rules.",
-    },
-  },
-};
-
-WithCustomOnChange.parameters = {
-  docs: {
-    description: {
-      story: "An input field with a custom onChange handler.",
+  parameters: {
+    docs: {
+      description: {
+        story: "An input field with a custom onChange handler.",
+      },
     },
   },
 };
@@ -274,8 +329,6 @@ meta.parameters = {
   docs: {
     description: {
       component: `
-# Input Component
-
 The Input component is a versatile and customizable input field that supports various types of inputs including text, email, password, number, telephone, radio buttons, switches, and dropdowns. It integrates seamlessly with react-hook-form for form state management and validation.
 
 ## Features
@@ -326,8 +379,8 @@ The following table shows which props are applicable to each input type:
 | disabled | boolean | Whether the input is disabled |
 | className | string | Additional CSS classes |
 | placeholder | string | Placeholder text for the input |
-| options | Array<{ label: string; value: string; disabled?: boolean }> | Options for radio inputs |
-| dropdownOptions | Array<Array<MenuItem> | Options for dropdown inputs |
+| radioOptions | Array < RadioOptions > | Options for radio inputs |
+| dropdownOptions |  Array < MenuItem > | Options for dropdown inputs |
 | customOnChange | function | Custom onChange handler |
 | customValidation | RegisterOptions | Custom validation rules |
 | badge | string | Text to display in a badge next to the label |

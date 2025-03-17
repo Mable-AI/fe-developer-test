@@ -1,16 +1,15 @@
 import * as React from "react";
 import { useFormContext, RegisterOptions, useWatch } from "react-hook-form";
-import { tv } from "tailwind-variants";
 import Switch from "@/components/Atoms/Controls/Switch";
 import DropdownMenu from "@/components/Molecules/Dropdowns";
 import Radio from "../RadioButton";
-import { MenuItem } from "@/types";
+import { MenuItem, RadioOptions } from "@/types";
 import { IoIosEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
-import { Tooltip } from "../../Misc/Tooltip";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-
-interface CustomChangeEvent {
+import { InputLabel } from "./components/InputLabel";
+import { InputError } from "./components/InputError";
+import DefaultInput from "./components/DefaultInput";
+export interface CustomChangeEvent {
   target: {
     name: string;
     value: any;
@@ -18,43 +17,35 @@ interface CustomChangeEvent {
   };
 }
 
+export type InputType =
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "radio"
+  | "switch"
+  | "checkbox"
+  | "dropdown";
+
 interface CustomInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   name: string;
   label?: string;
   tooltip?: string;
-  type:
-    | "text"
-    | "email"
-    | "password"
-    | "number"
-    | "tel"
-    | "radio"
-    | "switch"
-    | "checkbox"
-    | "dropdown";
-  radioOptions?: Array<{ label: string; value: string; disabled?: boolean }>;
+  type: InputType;
+  radioOptions?: Array<RadioOptions>;
   required?: boolean;
   badge?: string;
+  tooltipPlacement?: "top" | "bottom" | "left" | "right";
   dropdownOptions?: Array<MenuItem>;
   customValidation?: RegisterOptions;
+  inputSize?: "sm" | "md" | "lg";
+
   onChange?: (
     event: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent,
   ) => void;
 }
-
-const inputClass = tv({
-  base: "body-3 w-full rounded-xl p-4 bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
-  variants: {
-    error: {
-      true: "border border-error-600",
-      false: "",
-    },
-    withIcon: {
-      true: "pr-12", // Add padding to the right to accommodate the icon
-    },
-  },
-});
 
 const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
   (
@@ -71,6 +62,8 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       dropdownOptions,
       onChange,
       customValidation,
+      tooltipPlacement,
+      inputSize = "lg",
       ...props
     },
     ref,
@@ -112,6 +105,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
             value: /^[0-9]{10}$/,
             message: "Invalid phone number (10 digits required)",
           };
+
           break;
         case "number":
           rules.valueAsNumber = true;
@@ -176,6 +170,19 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
     });
 
     const renderInput = () => {
+      const commonPropsForDefaultInput = {
+        ...inputProps,
+        ...props,
+        className,
+        disabled,
+        parentRef: ref,
+        inputRef,
+        defaultValue: props.defaultValue,
+        isError: !disabled && errors[name] !== undefined,
+        handleChange,
+        inputSize,
+      };
+
       switch (type) {
         case "radio":
           return (
@@ -192,7 +199,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
               onClick={(selectedOption) =>
                 handleChange(createCustomEvent(selectedOption.value))
               }
-              size="sm"
+              size={inputSize}
             />
           );
         case "switch":
@@ -217,7 +224,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           return (
             <DropdownMenu
               disabled={disabled}
-              size="lg"
+              size={inputSize}
               menuList={dropdownOptions || []}
               onChange={(value) => handleChange(createCustomEvent(value.label))}
               className={className}
@@ -227,91 +234,53 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
                 : (props.defaultValue ?? props.placeholder)}
             </DropdownMenu>
           );
-        default:
+        case "tel":
           return (
-            <div className="relative w-full">
-              <input
-                defaultValue={props.defaultValue}
-                className={inputClass({
-                  error: !disabled && errors[name] !== undefined,
-                  withIcon: type === "password",
-                  className,
-                })}
-                disabled={disabled}
-                id={name}
-                type={type === "password" && showPassword ? "text" : type}
-                {...inputProps}
-                onChange={handleChange}
-                {...props}
-                ref={(e) => {
-                  inputRef(e);
-                  if (typeof ref === "function") ref(e);
-                }}
-              />
-              {type === "password" && (
-                <button
-                  type="button"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white focus:outline-none"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <IoIosEyeOff size={20} />
-                  ) : (
-                    <IoEye size={20} />
-                  )}
-                </button>
-              )}
-            </div>
+            <DefaultInput
+              {...commonPropsForDefaultInput}
+              type="number"
+              disableNumberInputDefaults={true}
+            />
           );
+        case "password":
+          return (
+            <DefaultInput
+              withIcon={true}
+              type={showPassword ? "text" : "password"}
+              {...commonPropsForDefaultInput}
+            >
+              <button
+                type="button"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white focus:outline-none"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <IoIosEyeOff size={20} /> : <IoEye size={20} />}
+              </button>
+            </DefaultInput>
+          );
+
+        default:
+          return <DefaultInput {...commonPropsForDefaultInput} type={type} />;
       }
     };
 
     React.useEffect(() => {
-      renderInput();
       if (!disabled) resetField(name, { defaultValue: props.defaultValue });
     }, [disabled]);
 
-    const renderLabel = () => {
-      if (type === "switch" || type === "radio") return null;
-      return (
-        <label htmlFor={name} className="body-2 text-white">
-          {label}
-        </label>
-      );
-    };
-
-    const renderTooltip = (text: string) => {
-      if (!tooltip) return null;
-      return (
-        <Tooltip content={text}>
-          <div>
-            <AiOutlineInfoCircle
-              className="text-white flex-shrink-0"
-              size={16}
-            />
-          </div>
-        </Tooltip>
-      );
-    };
     return (
       <div
-        className={`flex flex-col gap-2 w-full py-1 h-fit ${disabled ? "opacity-40" : "opacity-100"}`}
+        className={`flex flex-col gap-2 w-full  py-1 h-full ${disabled ? "opacity-40" : "opacity-100"}`}
       >
-        <div className="flex flex-row items-center space-x-3">
-          {label && renderLabel()}
-          {badge && (
-            <div className="caption text-white py-1 px-2 rounded-xl bg-white bg-opacity-10">
-              {badge}
-            </div>
-          )}
-          {tooltip && renderTooltip(tooltip)}
-        </div>
+        <InputLabel
+          name={name}
+          label={label}
+          tooltip={tooltip}
+          tooltipPlacement={tooltipPlacement}
+          type={type}
+        />
         {renderInput()}
-        {!disabled && errors[name] && (
-          <span className="text-error-600 text-xs">
-            {errors[name]?.message as string}
-          </span>
-        )}
+        <InputError error={errors[name]?.message as string} />
       </div>
     );
   },

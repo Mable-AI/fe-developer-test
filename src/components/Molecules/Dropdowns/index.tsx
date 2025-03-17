@@ -145,7 +145,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   aria-labelledby="options-menu"
                 >
                   <AnimatePresence>
-                    {menuList.map((item: MenuItem, index: number) => (
+                    {menuList?.map((item: MenuItem, index: number) => (
                       <motion.button
                         initial={{ opacity: 0, x: 0 }}
                         animate={{ opacity: 1, x: 0 }}
