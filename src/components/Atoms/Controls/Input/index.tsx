@@ -287,6 +287,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
     };
 
     const InputLabel = () => {
+      if (!label && !badge && !tooltip) return null;
       return (
         <div className="flex flex-row items-center space-x-3">
           {label && type !== "switch" && type !== "radio" && (
