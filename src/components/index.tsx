@@ -26,6 +26,7 @@ export { default as Skeleton } from '@/components/Atoms/Skeleton';
 export { default as ChannelSelector } from '@/components/Molecules/ChannelSelector';
 export { default as GroupBarChart } from '@/components/Molecules/Charts/GroupBarChart';
 export { default as PieChart } from '@/components/Molecules/Charts/PieChart';
+export { default as ChatbotWidget } from '@/components/Molecules/ChatbotWidget';
 export { CheckboxDropdown } from '@/components/Molecules/CheckboxDropdown';
 export { ConnectionCard } from '@/components/Molecules/ConnectionCard';
 export { default as Datagrid } from '@/components/Molecules/Datagrid';
