@@ -3,7 +3,7 @@ import { InputType, CustomChangeEvent } from "../index";
 import { tv } from "tailwind-variants";
 
 const inputClass = tv({
-  base: "body-3 w-full rounded-xl h bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
+  base: "body-3 w-full rounded-xl bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
   variants: {
     error: {
       true: "border border-error-600",
