@@ -129,10 +129,10 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   const role = useRole(context);
   const { getReferenceProps } = useInteractions([click, role]);
 
-  const handleAddBotMessage = React.useCallback((message: string) => {
+  const handleAddBotMessage = React.useCallback(() => {
     const newMessage = {
       id: `bot-${Date.now()}`,
-      text: `Our AI is processing your message:${message}, This Custom message is passed if Message is not handled by the user`,
+      text: `Thanks for your message! Our team will get back to you shortly.`,
       sender: "bot" as const,
       timestamp: new Date(),
     };
@@ -162,19 +162,30 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       }
 
       if (onSendMessage) {
-        const data = await onSendMessage(message);
+        try {
+          const data = await onSendMessage(message);
 
-        if (data) {
-          const newMessage = {
-            id: `bot-${Date.now()}`,
-            text: data,
+          if (data) {
+            const newMessage = {
+              id: `bot-${Date.now()}`,
+              text: data,
+              sender: "bot" as const,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, newMessage]);
+          }
+        } catch (error) {
+          console.error("Error processing message:", error);
+          const errorMessage = {
+            id: `error-${Date.now()}`,
+            text: "Sorry, there was an error processing your message. Please try again.",
             sender: "bot" as const,
             timestamp: new Date(),
           };
-          setMessages((prev) => [...prev, newMessage]);
+          setMessages((prev) => [...prev, errorMessage]);
         }
       } else {
-        handleAddBotMessage(message);
+        handleAddBotMessage();
       }
     },
     [onSendMessage, showTypingIndicator, typingDuration, handleAddBotMessage],

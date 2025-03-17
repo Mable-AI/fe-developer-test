@@ -233,7 +233,10 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(
               if (e) {
                 inputRef(e);
                 if (typeof ref === "function") ref(e);
-                else if (ref) (ref as React.MutableRefObject<any>).current = e;
+                else if (ref)
+                  (
+                    ref as React.MutableRefObject<HTMLInputElement | null>
+                  ).current = e;
               }
             }}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

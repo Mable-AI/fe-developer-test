@@ -50,7 +50,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckBoxProps>(
     });
 
     const checkboxClass = tv({
-      base: "body-3 w-full rounded-xl p-4 bg-white bg-opacity-10 ring-0 outline-0 focus:ring-1 active:ring-1 focus:ring-white active:ring-white transition-all ease-in-out duration-300 text-white",
+      base: "appearance-none h-5 w-5 border border-gray-300 rounded bg-white checked:bg-primary-500 checked:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-400 transition-all duration-200",
       variants: {
         disabled: {
           true: "cursor-not-allowed opacity-50",
