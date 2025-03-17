@@ -27,7 +27,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   position = "bottom",
   disabled = false,
 }) => {
-  console.log("menuList", menuList);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const listItemsRef = useRef<(HTMLElement | null)[]>([]);

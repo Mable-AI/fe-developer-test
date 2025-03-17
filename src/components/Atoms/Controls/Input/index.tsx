@@ -4,7 +4,7 @@ import { tv } from "tailwind-variants";
 import Switch from "@/components/Atoms/Controls/Switch";
 import DropdownMenu from "@/components/Molecules/Dropdowns";
 import Radio from "../RadioButton";
-import { MenuItem } from "@/types";
+import { MenuItem, RadioOptions } from "@/types";
 import { IoIosEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { Tooltip } from "../../Misc/Tooltip";
@@ -35,7 +35,7 @@ interface CustomInputProps
   label?: string;
   tooltip?: string;
   type: InputType;
-  radioOptions?: Array<{ label: string; value: string; disabled?: boolean }>;
+  radioOptions?: Array<RadioOptions>;
   required?: boolean;
   badge?: string;
   tooltipPlacement?: "top" | "bottom" | "left" | "right";
@@ -193,7 +193,6 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         parentRef: ref,
         inputRef,
         defaultValue: props.defaultValue,
-        id: name,
         isError: !disabled && errors[name] !== undefined,
         handleChange,
       };
@@ -344,7 +343,6 @@ const DefaultInput = ({
   inputRef,
   className,
   parentRef,
-  id,
   children,
   disableNumberInputDefaults,
   ...restProps
@@ -352,7 +350,6 @@ const DefaultInput = ({
   defaultValue?: string | number | readonly string[] | undefined;
   disabled?: boolean;
   isError?: boolean;
-  id: string;
   type: InputType;
   handleChange?: (
     event: React.ChangeEvent<HTMLInputElement> | CustomChangeEvent,
@@ -377,7 +374,7 @@ const DefaultInput = ({
           className,
         })}
         disabled={disabled}
-        id={id}
+        id={randomIdGenerator()}
         type={type}
         onChange={handleChange}
         ref={(e) => {
@@ -389,6 +386,10 @@ const DefaultInput = ({
       {children}
     </div>
   );
+};
+
+const randomIdGenerator = () => {
+  return Math.random().toString(36).substring(2, 15);
 };
 
 Input.displayName = "Input";
