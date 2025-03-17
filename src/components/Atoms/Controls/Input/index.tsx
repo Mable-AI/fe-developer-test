@@ -180,7 +180,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         defaultValue: props.defaultValue,
         isError: !disabled && errors[name] !== undefined,
         handleChange,
-        size: inputSize,
+        inputSize,
       };
 
       switch (type) {
