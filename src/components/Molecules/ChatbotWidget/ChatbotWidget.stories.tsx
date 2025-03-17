@@ -32,13 +32,10 @@ export function MyComponent() {
       title="Support Chat"
       position="fixed"
       widgetPosition="bottom-right"
-    >
-      <div className="space-y-4">
-        <div className="bg-white/5 p-4 rounded-lg">
-          <p>Hello! How can I help you today?</p>
-        </div>
-      </div>
-    </ChatbotWidget>
+      onSubmit={(userMessage: string) => {
+        console.log(userMessage);
+      }}
+    />
   );
 }
 \`\`\`
