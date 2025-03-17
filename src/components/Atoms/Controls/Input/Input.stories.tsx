@@ -48,6 +48,8 @@ export const Email: Story = {
     type: "email",
     label: "Email Input",
     placeholder: "Enter email",
+    tooltip: "This is a tooltip",
+    badge: "Professional",
   },
   render: (args) => <InputWrapper {...args} />,
 };
