@@ -1,14 +1,25 @@
 import { tv } from "tailwind-variants";
 
+interface BadgeProps {
+  variant:
+    | "primary"
+    | "neutral"
+    | "success"
+    | "warning"
+    | "error"
+    | "info"
+    | "custom";
+  label: string;
+  rounded?: boolean;
+  className?: string;
+}
+
 export default function Badge({
   variant,
-  rounded,
+  rounded = false,
   label,
-}: {
-  variant: "primary" | "neutral" | "success" | "warning" | "error" | "info";
-  rounded: boolean;
-  label: string;
-}) {
+  className,
+}: BadgeProps) {
   const badgeVariants = tv({
     base: "w-fit text-white py-1 px-2 body-6 text-center",
     variants: {
@@ -19,6 +30,7 @@ export default function Badge({
         warning: "bg-warning-400",
         error: "bg-error-600",
         info: "bg-info-600",
+        custom: "", // no default background
       },
       rounded: {
         true: "rounded-xl",
@@ -28,7 +40,7 @@ export default function Badge({
   });
 
   return (
-    <div className={badgeVariants({ variant: variant, rounded: rounded })}>
+    <div className={badgeVariants({ variant, rounded, className })}>
       {label}
     </div>
   );

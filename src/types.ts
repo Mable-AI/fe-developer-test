@@ -17,6 +17,42 @@ export type RadioOptions = {
   disabled?: boolean;
 };
 
+export interface CustomChangeEvent {
+  target: {
+    name: string;
+    value: string | number | boolean;
+    type: string;
+  };
+}
+
+export interface RadioItems {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+export type ValidInputType = "email" | "tel" | "number" | "password";
+
+export type InputComponentType =
+  | "radio"
+  | "switch"
+  | "dropdown"
+  | "default"
+  | "checkbox"
+  | "textarea";
+
+export type InputType =
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "radio"
+  | "dropdown"
+  | "switch"
+  | "checkbox"
+  | "textarea";
+
 export interface RadioItemProps {
   options: RadioOptions[];
   defaultValue: string;
